@@ -74,7 +74,7 @@ end
     WHERE grade = 10
     LIMIT x
     SQL
-    DB[:conn].execute(sql).collect do |row|
+    DB[:conn].execute(sql, x).collect do |row|
       self.new_from_db(row)
   end
 end
@@ -97,7 +97,7 @@ end
     FROM students
     WHERE grade = ?
     SQL
-    DB[:conn].execute(sql).map do |row|
+    DB[:conn].execute(sql, grade).map do |row|
       self.new_from_db(row)
     end
   end
