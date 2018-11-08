@@ -45,6 +45,56 @@ class Student
     DB[:conn].execute(sql, self.name, self.grade)
   end
 
+  def self.count_all_students_in_grade_9
+    sql = <<-SQL
+    SELECT *
+    FROM students
+    WHERE grade = ?
+    SQL
+    DB[:conn].execute(sql, 9)
+  end
+
+  def self.students_below_12th_grade
+    sql = <<-SQL
+    SELECT *
+    FROM students
+    WHERE grade < ?
+    SQL
+    DB[:conn].execute(sql, 12)
+  end
+
+  def self.first_x_students_in_grade_10(x)
+    sql = <<-SQL
+    SELECT *
+    FROM students
+    WHERE grade = ?
+    LIMIT ?
+    SQL
+    DB[:conn].execute(sql, 10, x)
+  end
+
+  def self.first_student_in_grade_10
+    sql = <<-SQL
+    SELECT *
+    FROM students
+    WHERE grade = 10
+    LIMIT 1
+    SQL
+    row = DB[:conn].execute(sql).flatten
+    self.new_from_db(row)
+  end
+
+  def self.all_students_in_grade_x(x)
+    sql = <<-SQL
+    SELECT *
+    FROM students
+    WHERE grade = ?
+    SQL
+    DB[:conn].execute(sql, x).map do |row|
+      self.new_from_db(row)
+    end
+  end
+
   def self.create_table
     sql = <<-SQL
     CREATE TABLE IF NOT EXISTS students (
